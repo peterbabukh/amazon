@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="<%= t('lang') %>">
+<head>
+    <meta charset="UTF-8">
+    <title><%= t('title') %></title>
+    <!-- Here we pass already transpiled and minified single css file from dist folder -->
+    <link rel="stylesheet" type="text/css" href="/css/AmazonPlus.css" />
+    <script data-main="./js/main.js" src="./js/lib/require-2.1.20.js"></script>
+    <!-- <script src="/req/AmazonPlus.js"></script> -->
+</head>
+<body>
+<!--[if lt IE 10]>
+    <div style="color:red;text-align:center">
+        <%= t('text.upgradeYourBrowser') %>
+    </div>
+<![endif]-->
+<div class="layout-box">
+    <div class="content-box">
+        <!-- CSS spinner -->
+        <div id="floatingCirclesG">
+            <div class="f_circleG" id="frotateG_01"></div>
+            <div class="f_circleG" id="frotateG_02"></div>
+            <div class="f_circleG" id="frotateG_03"></div>
+            <div class="f_circleG" id="frotateG_04"></div>
+            <div class="f_circleG" id="frotateG_05"></div>
+            <div class="f_circleG" id="frotateG_06"></div>
+            <div class="f_circleG" id="frotateG_07"></div>
+            <div class="f_circleG" id="frotateG_08"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
