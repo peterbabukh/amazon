@@ -14,9 +14,6 @@ var schema = new Schema({
     img: {
         type: String
     },
-    entry0: {
-        type: Schema.Types.Mixed
-    },
     entry1: {
         type: Schema.Types.Mixed
     },

@@ -19,7 +19,8 @@ define( function(require) {
         template: _.template( homeTmpl ),
 
         events: {
-            'click .td-filter': 'filterTable'
+            'click .td-filter': 'filterTable',
+            'click #get-amazon-btn': 'getAmazon'
         },
 
         initialize: function() {
@@ -29,20 +30,31 @@ define( function(require) {
 
         render: function() {
             var self = this;
+            this.$el.html( this.template() );
 
             this.books.fetch({
                 success: function (books, response, options) {
 
-                    self.collection = new BooksCollection( response[0].books );
-                    self.collection.on('change', self.handleSuccess, self);
-                    //self.listenTo(self.collection, 'successOnFetch', self.handleSuccess);
-                    //self.listenTo(self.collection, 'errorOnFetch', self.handleError);
+                    if ( response[0] && response[0].books ) {
+                        self.collection = new BooksCollection( response[0].books );
+
+                        self.collection.on('change', self.handleSuccess, self);
+                        //self.listenTo(self.collection, 'successOnFetch', self.handleSuccess);
+                        //self.listenTo(self.collection, 'errorOnFetch', self.handleError);
+                    }
+
                 },
                 error: function (user, response, options) {
                     self.handleError();
                 }
             }).done(function(){
-                self.handleSuccess();
+
+                if(self.collection && self.collection.length) {
+                    self.handleSuccess();
+                } else {
+                    return false;
+                }
+
             });
 
 			return this;
@@ -50,7 +62,6 @@ define( function(require) {
 
         handleSuccess: function () {
             //this.onClose();
-            this.$el.html( this.template() );
             this.showBooks();
 
             //this.prependHeader();
@@ -64,7 +75,29 @@ define( function(require) {
 
         },
 
+        getAmazon: function () {
+            var self = this;
+
+            if ( $('#get-amazon-btn').attr('data-status') == 'clicked' ) {
+                return;
+            }
+
+            $('#get-amazon-btn').text('Please, wait! The data is being downloaded!')
+                .attr('data-status', 'clicked');
+
+
+            $.ajax({
+                url: "/amazon"
+            })
+                .done(function( msg ) {
+                    self.render();
+                });
+
+
+        },
+
         showBooks: function() {
+
             this.$el.append(_.template( tableTmpl ) );
             this.collection.each(function(elem) {
                 var bookModelView = new BookModelView( { model: elem } );

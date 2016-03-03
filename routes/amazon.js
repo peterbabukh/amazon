@@ -10,7 +10,6 @@ exports.get = function(req, res) {
     var books = new Books();
     var flag = 0;
     var timer;
-    //var Books = [];
 
     request(url, function (error, response, body) {
 
@@ -63,7 +62,6 @@ exports.get = function(req, res) {
                     
                     var book = new Book(obj);
                     books.books.push( book );
-                    //Books.push( obj );
                     flag += 1;
 
 
@@ -84,19 +82,23 @@ exports.get = function(req, res) {
                 books.save(function(err) {
                     if (err) return next(err);
 
-                    return res.send( JSON.stringify(books) );
+                    res.end(function(err) {
+                        if (err) {return next(err);}
+                    });
+                    
+                    res.end();
+                    
 
                 });
 
 
-                //res.send( JSON.stringify(Books) );
             }
 
             timer();
 
 
         } else {
-            console.log("Произошла ошибка: " + error);
+            console.log("Something went wrong: " + error);
         }
 
     });
