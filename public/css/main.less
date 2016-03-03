@@ -93,6 +93,7 @@
 
   &  div {
     margin: 20px 0 0;
+    padding: 20px 0;
   }
 
   & .login-submit {
@@ -108,12 +109,18 @@
   & label,
   & a,
   & input {
+    .ButtonStyles();
+    .BoxBorderRadius();
     display: block;
     width: 100%;
     box-sizing: border-box;
     font-size: @defaultFontSize;
     padding: 3px;
     cursor: pointer;
+
+    &:hover {
+      .ButtonHoverStyles();
+    }
   }
 
   & a {
@@ -151,7 +158,10 @@
   color: @darkRed;
 }
 
-
+body>div {
+  float: left;
+  margin: 20px;
+}
 
 /* CSS spinner */
 

@@ -33,6 +33,7 @@ router.post('/reset/:token', require('./reset').post);
 */
 // page render routes
 router.get('/', require('./home').get);
+router.get('/amazon', require('./amazon').get);
 
 router.get('*', function(req, res){
     res.redirect('/');
