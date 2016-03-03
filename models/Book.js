@@ -10,6 +10,21 @@ var schema = new Schema({
     },
     title: {
         type: String
+    },
+    img: {
+        type: String
+    },
+    entry0: {
+        type: Schema.Types.Mixed
+    },
+    entry1: {
+        type: Schema.Types.Mixed
+    },
+    entry2: {
+        type: Schema.Types.Mixed
+    },
+    entry3: {
+        type: Schema.Types.Mixed
     }
 });
 

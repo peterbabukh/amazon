@@ -5,8 +5,12 @@ define( function(require) {
     var Backbone = require('backbone');
     var i18n = require('i18n!../../js/nls/locales');
     var homeTmpl = require('text!../../templates/homeTmpl.html');
+    var tableTmpl = require('text!../../templates/tableTmpl.html');
     //var appHeaderTmpl = require('text!../../templates/appHeaderTmpl.html');
     //var AppHeaderView = require('app/AppHeaderView');
+    var BooksCollection = require('app/BooksCollection');
+    var BooksModel = require('app/BooksModel');
+    var BookModelView = require('app/BookModelView');
 
     var Home = Backbone.View.extend({
 
@@ -15,18 +19,62 @@ define( function(require) {
         template: _.template( homeTmpl ),
 
         events: {
-
+            'click .td-filter': 'filterTable'
         },
 
         initialize: function() {
             this.childViews = [];
+            this.books = new BooksModel();
         },
 
         render: function() {
-            //this.onClose();
-			this.$el.html( this.template() );
-            //this.prependHeader();
+            var self = this;
+
+            this.books.fetch({
+                success: function (books, response, options) {
+
+                    self.collection = new BooksCollection( response[0].books );
+                    self.collection.on('change', self.handleSuccess, self);
+                    //self.listenTo(self.collection, 'successOnFetch', self.handleSuccess);
+                    //self.listenTo(self.collection, 'errorOnFetch', self.handleError);
+                },
+                error: function (user, response, options) {
+                    self.handleError();
+                }
+            }).done(function(){
+                self.handleSuccess();
+            });
+
 			return this;
+        },
+
+        handleSuccess: function () {
+            //this.onClose();
+            this.$el.html( this.template() );
+            this.showBooks();
+
+            //this.prependHeader();
+
+        },
+
+        handleError: function () {
+            //alert( i18n.msg.systemErrorMessage );
+            console.log( 'error during colection fetch' );
+            window.location.reload();
+
+        },
+
+        showBooks: function() {
+            this.$el.append(_.template( tableTmpl ) );
+            this.collection.each(function(elem) {
+                var bookModelView = new BookModelView( { model: elem } );
+
+                // need it to remove this view upon removal of this.$el
+                this.childViews.push( bookModelView );
+
+                $('#book-list').append( bookModelView.render().el );
+                
+            }, this);
         },
 
         prependHeader: function() {
@@ -45,6 +93,68 @@ define( function(require) {
                 }
             });
             this.childViews.length = 0;
+        },
+
+        filterTable: function(event) {
+
+            event = event || window.event;
+            var target,
+                index;
+
+            target = event.target || event.srcElement;
+            target = $(target).closest('td');
+            index = $(target)[0].cellIndex;
+
+            switch( index ) {
+                case 0:
+                    return;
+                case 1:
+                    this.collection.comparator = function(model){
+                        return model.get('title');
+                    };
+                    this.collection.sort();
+                    break;
+                case 2:
+                    this.collection.comparator = function(model){
+                        var str = model.get('salesRank').toString().split('').slice(1).join('');
+                        var num = parseInt( str );
+                        return num;
+                    };
+                    this.collection.sort();
+                    break;
+                case 3:
+                    this.collection.comparator = function(model){
+                        var str = model.get('entry1').rank.toString().split('').slice(1).join('');
+                        var num = parseInt( str );
+                        return num;
+                    };
+                    this.collection.sort();
+                    break;
+                case 4:
+                    this.collection.comparator = function(model){
+                        var str = model.get('entry2').rank.toString().split('').slice(1).join('');
+                        var num = parseInt( str );
+                        return num;
+                    };
+                    this.collection.sort();
+                    break;
+                case 5:
+                    this.collection.comparator = function(model){
+                        var str = model.get('entry3').rank.toString().split('').slice(1).join('');
+                        var num = parseInt( str );
+                        return num;
+                    };
+                    this.collection.sort();
+                    break;
+                default:
+                    this.collection.comparator = function(model){
+                        return model.get('title');
+                    };
+            }
+
+            $('#book-list').remove();
+            this.showBooks();
+
         }
 
 

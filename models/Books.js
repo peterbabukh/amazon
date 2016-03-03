@@ -11,4 +11,4 @@ var schema = new Schema({
 
 });
 
-exports.User = mongoose.model('Books', schema);
+exports.Books = mongoose.model('Books', schema);

@@ -71,6 +71,34 @@
   box-sizing: border-box;
 }
 
+#book-list {
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: left;
+  vertical-align: top;
+  width: 95%;
+
+  & tr:first-child td{
+    cursor: pointer;
+    height: 40px;
+
+    &:hover {
+      background-color: @lightMaroonColor;
+    }
+  }
+
+  & td{
+    padding: 0 5px;
+    word-wrap: break-word;
+    .ColoredBorder();
+
+  }
+}
+
+li {
+  list-style: none;
+}
+
 .layout-box {
   font-family: Georgia, Verdana, sans-serif;
   font-size: @defaultFontSize;

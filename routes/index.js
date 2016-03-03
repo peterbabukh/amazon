@@ -35,6 +35,10 @@ router.post('/reset/:token', require('./reset').post);
 router.get('/', require('./home').get);
 router.get('/amazon', require('./amazon').get);
 
+//TODO: delete these testing routes
+router.get('/books', require('./books').get);
+router.get('/clear', require('./clear').get);
+
 router.get('*', function(req, res){
     res.redirect('/');
 });
