@@ -4,6 +4,7 @@ var mongoose = require('../lib/mongoose');
 
 var Schema = mongoose.Schema;
 
+// this schema is used for sessions / login / signup...
 var schema = new Schema({
 
     email: {

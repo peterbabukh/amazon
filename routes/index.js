@@ -33,11 +33,17 @@ router.post('/reset/:token', require('./reset').post);
 */
 // page render routes
 router.get('/', require('./home').get);
+
+// Amazon data retrieving route
 router.get('/amazon', require('./amazon').get);
 
-//TODO: delete these testing routes
+// books collection fetch route
 router.get('/books', require('./books').get);
+
+//TODO: delete these testing routes
 router.get('/clear', require('./clear').get);
+router.get('/test', require('./test').get);
+
 
 router.get('*', function(req, res){
     res.redirect('/');

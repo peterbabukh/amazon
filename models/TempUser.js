@@ -3,6 +3,7 @@ var mongoose = require('../lib/mongoose');
 
 var Schema = mongoose.Schema;
 
+// this schema is used for password forgot to create temporary user with token data
 var schema = new Schema({
 
     email: {

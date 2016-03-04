@@ -29,6 +29,7 @@ define( function(require) {
             // to map from mongodb _id to id
             Backbone.Model.prototype.idAttribute = '_id';
 
+
             var applicationRouter = new ApplicationRouter();
 
             //Backbone.history.start();

@@ -2,26 +2,41 @@ var mongoose = require('../lib/mongoose');
 
 var Schema = mongoose.Schema;
 
-// create the pattern for every single word model to be saved in db
+// creates the pattern for every single book model to be saved in db
 var schema = new Schema({
 
     salesRank: {
-        type: String
+        type: String,
+        default: '##'
     },
     title: {
-        type: String
+        type: String,
+        default: 'Not available'
     },
     img: {
-        type: String
+        type: String,
+        default: 'Not available'
     },
     entry1: {
-        type: Schema.Types.Mixed
+        type: Schema.Types.Mixed,
+        default: {
+            rank: '##',
+            ladder: ''
+        }
     },
     entry2: {
-        type: Schema.Types.Mixed
+        type: Schema.Types.Mixed,
+        default: {
+            rank: '##',
+            ladder: ''
+        }
     },
     entry3: {
-        type: Schema.Types.Mixed
+        type: Schema.Types.Mixed,
+        default: {
+            rank: '##',
+            ladder: ''
+        }
     }
 });
 

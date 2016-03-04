@@ -19,7 +19,7 @@ define( function(require) {
         template: _.template( homeTmpl ),
 
         events: {
-            'click .td-filter': 'filterTable',
+            'click .td-filter': 'sortTable',
             'click #get-amazon-btn': 'getAmazon'
         },
 
@@ -32,12 +32,12 @@ define( function(require) {
             var self = this;
             this.$el.html( this.template() );
 
+            // fetches the books from db to create/update this.collection
             this.books.fetch({
                 success: function (books, response, options) {
 
                     if ( response[0] && response[0].books ) {
                         self.collection = new BooksCollection( response[0].books );
-
                         self.collection.on('change', self.handleSuccess, self);
                         //self.listenTo(self.collection, 'successOnFetch', self.handleSuccess);
                         //self.listenTo(self.collection, 'errorOnFetch', self.handleError);
@@ -48,7 +48,7 @@ define( function(require) {
                     self.handleError();
                 }
             }).done(function(){
-
+                // checks if there are items in collection to move further on
                 if(self.collection && self.collection.length) {
                     self.handleSuccess();
                 } else {
@@ -61,7 +61,7 @@ define( function(require) {
         },
 
         handleSuccess: function () {
-            //this.onClose();
+            this.onClose();
             this.showBooks();
 
             //this.prependHeader();
@@ -69,23 +69,24 @@ define( function(require) {
         },
 
         handleError: function () {
-            //alert( i18n.msg.systemErrorMessage );
             console.log( 'error during colection fetch' );
             window.location.reload();
-
         },
 
+        // sends request to server to scrape data from Amazon
         getAmazon: function () {
             var self = this;
 
+            // if in scraping progress - returns
             if ( $('#get-amazon-btn').attr('data-status') == 'clicked' ) {
                 return;
             }
 
+            // sets flag that the scraping process is on
             $('#get-amazon-btn').text('Please, wait! The data is being downloaded!')
                 .attr('data-status', 'clicked');
 
-
+            // sends ajax request
             $.ajax({
                 url: "/amazon"
             })
@@ -96,10 +97,13 @@ define( function(require) {
 
         },
 
+        // creates table with books data from the collection fetched
         showBooks: function() {
 
             this.$el.append(_.template( tableTmpl ) );
+
             this.collection.each(function(elem) {
+
                 var bookModelView = new BookModelView( { model: elem } );
 
                 // need it to remove this view upon removal of this.$el
@@ -110,6 +114,7 @@ define( function(require) {
             }, this);
         },
 
+        // prepends header. Not used in this APP yet
         prependHeader: function() {
             var appHeaderView = new AppHeaderView();
             // used prepend instead of append for further adaptive css purposes
@@ -128,8 +133,10 @@ define( function(require) {
             this.childViews.length = 0;
         },
 
-        filterTable: function(event) {
-
+        // sorts the table of books displayed by changing the comparator and resorting the collection
+        // TODO: find a better way for natural sorting of collection
+        sortTable: function(event) {
+            var self = this;
             event = event || window.event;
             var target,
                 index;
@@ -149,7 +156,11 @@ define( function(require) {
                     break;
                 case 2:
                     this.collection.comparator = function(model){
-                        var str = model.get('salesRank').toString().split('').slice(1).join('');
+                        var str = model.get('salesRank').toString()
+                            .split('')
+                            .slice(1)
+                            .join('')
+                            .replace(/#/,"1000000");
                         var num = parseInt( str );
                         return num;
                     };
@@ -157,7 +168,11 @@ define( function(require) {
                     break;
                 case 3:
                     this.collection.comparator = function(model){
-                        var str = model.get('entry1').rank.toString().split('').slice(1).join('');
+                        var str = model.get('entry1').rank.toString()
+                            .split('')
+                            .slice(1)
+                            .join('')
+                            .replace(/#/,"1000000");
                         var num = parseInt( str );
                         return num;
                     };
@@ -165,7 +180,11 @@ define( function(require) {
                     break;
                 case 4:
                     this.collection.comparator = function(model){
-                        var str = model.get('entry2').rank.toString().split('').slice(1).join('');
+                        var str = model.get('entry2').rank.toString()
+                            .split('')
+                            .slice(1)
+                            .join('')
+                            .replace(/#/,"1000000");
                         var num = parseInt( str );
                         return num;
                     };
@@ -173,7 +192,11 @@ define( function(require) {
                     break;
                 case 5:
                     this.collection.comparator = function(model){
-                        var str = model.get('entry3').rank.toString().split('').slice(1).join('');
+                        var str = model.get('entry3').rank.toString()
+                            .split('')
+                            .slice(1)
+                            .join('')
+                            .replace(/#/,"1000000");
                         var num = parseInt( str );
                         return num;
                     };

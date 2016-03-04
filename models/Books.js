@@ -1,6 +1,6 @@
-var crypto = require('crypto');
 var mongoose = require('../lib/mongoose');
 
+// this schema is used to create a collection of books, stored in db
 var Book = require('./Book').schema;
 
 var Schema = mongoose.Schema;
